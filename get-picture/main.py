@@ -10,12 +10,13 @@ from urllib.request import Request, urlopen, urlretrieve
 
 # ConstName
 IMG_PREFIX = "photo-"
-# origin href of BaiDu tieba
-ORIGIN_HREF = "https://tieba.baidu.com/p/4364768066?pn=" # default 1
+# origin href of BaiDu Tieba
+# default 1
+ORIGIN_HREF = "https://tieba.baidu.com/p/4364768066?pn="
 PAGENUM = 1
 
 ImageName = "photo_page7_"
-origi_herf = ORIGIN_HREF + PAGENUM
+origi_herf = ORIGIN_HREF + str(PAGENUM)
 print('='*66)
 
 def get_html_code(href):
@@ -41,7 +42,7 @@ else:
 count = 0
 for img in lists:
     urlretrieve(img, "./Downloads/" + ImageName + "_%s.jpg" % count)
-    # print("a link [./Downloads/" + ImageName + "_%s.jpg] photo download over" % count)
+    print("%2d picture img download over..." % count)
     count += 1
 
 print('='*66)

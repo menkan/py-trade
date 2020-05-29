@@ -46,7 +46,7 @@ else:
 # Download img
 count = 0
 for imgPath in lists:
-    urlretrieve(imgPath, "./Downloads/" + ImageName + "_%s.jpg" % count + 1)
+    urlretrieve(imgPath, "./Downloads/" + ImageName + "_%d.jpg" % (count + 1))
     print("%2d picture img download over..." % count)
     count += 1
 

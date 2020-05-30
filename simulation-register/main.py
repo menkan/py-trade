@@ -6,4 +6,5 @@
 # system command
 # import sys
 # input('Press any key to continue')
+# 。
 # sys.exit('exit system')

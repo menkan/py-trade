@@ -4,7 +4,6 @@
 
 # pip install requests
 # system command
-import sys
-
+# import sys
 # input('Press any key to continue')
 # sys.exit('exit system')

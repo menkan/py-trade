@@ -3,4 +3,9 @@
 
 > trade!
 
-## useless code practice
+## useless code practice.
+> query baidu tieba practice.
+## trans-language.
+> transform chinese -- english.
+
+

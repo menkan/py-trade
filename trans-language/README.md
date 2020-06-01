@@ -1,6 +1,5 @@
 > created by menkan on 2020/05/31 
 
-
 # change chinese trans for english
 
 1. Preform main.py

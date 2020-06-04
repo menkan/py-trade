@@ -8,7 +8,9 @@
 ## trans-language.
 > transform chinese -- english.
 
+##### 先练习爬取基础信息100条。
 
+> todolish....
 
 ###### Todo-list
 * [日志加入微信List](https://segmentfault.com/a/1190000009717078)

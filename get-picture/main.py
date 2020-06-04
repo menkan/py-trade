@@ -33,23 +33,24 @@ def query_images_list(code):
     return re.findall(regex, code)
 
 
-htmlCode = get_html_code(origi_herf)
+if __name__ == '__main__':
 
-if htmlCode:
-    lists = query_images_list(htmlCode)
-    print("Images total: %s" % len(lists))
-else:
-    print('Error: href Error, please confirm link address')
-    exit()
+    htmlCode = get_html_code(origi_herf)
 
+    if htmlCode:
+        lists = query_images_list(htmlCode)
+        print("Images total: %s" % len(lists))
+    else:
+        print('Error: href Error, please confirm link address')
+        exit()
 
-# Download img
-count = 0
-for imgPath in lists:
-    urlretrieve(imgPath, "./Downloads/" + ImageName + "_%d.jpg" % (count + 1))
-    print("%2d picture img download over..." % count)
-    count += 1
+    # Download img
+    count = 0
+    for imgPath in lists:
+        urlretrieve(imgPath, "./Downloads/" + ImageName + "_%d.jpg" % (count + 1))
+        print("%2d picture img download over..." % count)
+        count += 1
 
-print('='*66)
-print('download successful! $ cd ./Downloads/')
-print('='*66)
+    print('='*66)
+    print('download successful! $ cd ./Downloads/')
+    print('='*66)

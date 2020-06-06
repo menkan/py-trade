@@ -3,6 +3,7 @@
 import requests
 from lxml import etree
 import json
+import time
 
 headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36",
@@ -19,11 +20,11 @@ headers = {
 
 
 class Hilarious:
-
     def __init__(self):
         self.url = 'http://www.baoxiaobaike.com/p/{}'
         self.baseurl = 'http://www.baoxiaobaike.com'
-        self.total = 2591
+        # self.total = 2591
+        self.total = 1
         self.pageIndex = 1
 
     def gethtml(self, url):
@@ -31,15 +32,15 @@ class Hilarious:
         return response.content.decode()
 
     def handleChildrenEle(self, elements):
-        list = []
+        lists = []
         for element in elements:
             imgs = element.xpath('./div[@class="content"]//img/@src')
-            list.append({
+            lists.append({
                 "title": element.xpath('./div[@class="title"]/a/text()'),
                 "content": element.xpath('./div[@class="content"]//p/text()'),
                 "imgs": imgs if len(imgs) else ''
             })
-        return list
+        return lists
 
     # 获取每一块内容返回 list[dist]
     def handleElement(self, element):
@@ -47,13 +48,50 @@ class Hilarious:
         result = ele.xpath('//div[@class="article block untagged mb15"]')
         return self.handleChildrenEle(result)
 
+    def createdHtml(self, lists):
+        print(len(lists))
+        start = '<html><head><meta charset="utf-8" /></head><body><table>'
+        end = '</table></body></html>'
+        context = ''
+
+        for item in lists:
+            print(len(item['content']), item['content'])
+            context += '<tr>'
+            context += '<td>{}</td>'.format(item['title'][0])
+            # context += '<td>{}</td>'.format(item['content'][0])
+            context += '<td>'
+            # if item['imgs']:
+            #     for img in range(item['imgs']):
+            #         context += '<img src="' + self.baseurl + '{}" />'.format(img)
+            # else:
+            #     pass
+            context += '</td></tr>'
+
+        with open('index.html', 'w', encoding="utf-8") as f:
+            f.write(start + context + end)
+
+        print('html加载完成...')
+
     def run(self):
-        result = self.gethtml(self.url.format(1))
-        res = self.handleElement(result)
-        str = json.dumps(res, ensure_ascii=False)
+        page_index = 1
+        form_data = []
+        total = self.total + 1
+
+        while page_index < total:
+            print('filter content no.%s' % page_index)
+            result = self.gethtml(self.url.format(page_index))
+            res = self.handleElement(result)
+            form_data.extend(res)
+            page_index += 1
+            time.sleep(0.1)  # 延时0.1秒;防止对方服务器得知我们是爬虫
+
+        str_data = json.dumps(form_data, ensure_ascii=False)
         with open('example.json', 'w', encoding="utf-8") as f:
-            f.write(str)
-        # print(res)
+            f.write(str_data)
+
+        self.createdHtml(form_data)
+        print('='*60)
+        print('over form data')
 
 
 if __name__ == '__main__':

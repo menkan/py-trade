@@ -24,7 +24,7 @@ class Hilarious:
         self.url = 'http://www.baoxiaobaike.com/p/{}'
         self.baseurl = 'http://www.baoxiaobaike.com'
         # self.total = 2591
-        self.total = 1
+        self.total = 50
         self.pageIndex = 1
 
     def gethtml(self, url):
@@ -50,26 +50,24 @@ class Hilarious:
 
     def createdHtml(self, lists):
         print(len(lists))
-        start = '<html><head><meta charset="utf-8" /></head><body><table>'
-        end = '</table></body></html>'
+        start = r'<html><head><meta charset="utf-8" /></head><body>'
+        end = r'</body></html>'
         context = ''
 
         for item in lists:
-            print(len(item['content']), item['content'])
-            context += '<tr>'
-            context += '<td>{}</td>'.format(item['title'][0])
-            # context += '<td>{}</td>'.format(item['content'][0])
-            context += '<td>'
-            # if item['imgs']:
-            #     for img in range(item['imgs']):
-            #         context += '<img src="' + self.baseurl + '{}" />'.format(img)
-            # else:
-            #     pass
-            context += '</td></tr>'
-
+            context += '<div class="item">'
+            context += '<div class="item__title"><h3>{}</h3></div>'.format(item['title'][0])
+            if len(item['content']):
+                context += '<div class="context">'
+                for con in item['content']:
+                    context += '<p>{}</p>'.format(con)
+                context += '</div>'
+            if item['imgs']:
+                for img in item['imgs']:
+                    context += '<img src="' + self.baseurl + '{}" />'.format(img)
+            context += '</div>'
         with open('index.html', 'w', encoding="utf-8") as f:
             f.write(start + context + end)
-
         print('html加载完成...')
 
     def run(self):

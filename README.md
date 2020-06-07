@@ -9,6 +9,8 @@
 > transform chinese -- english.
 
 ##### 先练习爬取基础信息100例。
+> path `./study_100/*`
+1. baoxiaobaike -- over.
 
 > todolish....
 

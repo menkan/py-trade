@@ -81,7 +81,7 @@ class Hilarious:
             res = self.handleElement(result)
             form_data.extend(res)
             page_index += 1
-            time.sleep(0.1)  # 延时0.1秒;防止对方服务器得知我们是爬虫
+            time.sleep(0.2)  # 延时0.1秒; 防止对方服务器得知我们是爬虫
 
         str_data = json.dumps(form_data, ensure_ascii=False)
         with open('example.json', 'w', encoding="utf-8") as f:

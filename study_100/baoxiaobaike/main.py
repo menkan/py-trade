@@ -5,35 +5,35 @@ from lxml import etree
 import json
 import time
 
-headers = {
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36"
-}
+
+# Requests
+class RequestPage:
+
+    def __init__(self):
+        self.headers = {
+            # more nothing headers...
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36"
+        }
+
+    def get_html(self, url):
+        response = requests.get(url, headers=self.headers)
+        return response.content.decode()
 
 
 # Structure
 class HTMLStructure:
-    pass
+    def __init__(self, context):
+        self.context = context
 
+    # created html and return;
+    def created_html(self):
+        ct = self.context
+        return None if not ct else etree.HTML(ct)
 
-# CREATED OUTPUT
-class OutputHtml:
-    pass
+    def handle_c_context(self):
+        pass
 
-
-# Hilarious
-class Hilarious:
-    def __init__(self):
-        self.url = 'http://www.baoxiaobaike.com/p/{}'
-        self.baseurl = 'http://www.baoxiaobaike.com'
-        # self.total = 2591
-        self.total = 50
-        self.pageIndex = 1
-
-    def gethtml(self, url):
-        response = requests.get(url, headers=headers)
-        return response.content.decode()
-
-    def handleChildrenEle(self, elements):
+    def handle_child(self, elements):
         lists = []
         for element in elements:
             imgs = element.xpath('./div[@class="content"]//img/@src')
@@ -45,12 +45,15 @@ class Hilarious:
         return lists
 
     # 获取每一块内容返回 list[dist]
-    def handleElement(self, element):
-        ele = etree.HTML(element)
+    def handle_element(self):
+        ele = etree.HTML(self.context)
         result = ele.xpath('//div[@class="article block untagged mb15"]')
-        return self.handleChildrenEle(result)
+        return self.handle_child(result)
 
-    def createdHtml(self, lists):
+
+# CREATED OUTPUT
+class OutputHtml:
+    def output_html(self, lists):
         print(len(lists))
         start = r'<html><head><meta charset="utf-8" /></head><body>'
         end = r'</body></html>'
@@ -72,24 +75,39 @@ class Hilarious:
             f.write(start + context + end)
         print('html加载完成...')
 
+
+# Hilarious
+class Hilarious:
+    # initialization variable
+    def __init__(self):
+        self.url = 'http://www.baoxiaobaike.com/p/{}'
+        self.base_url = 'http://www.baoxiaobaike.com'
+        # self.total = 2591
+        self.total = 50
+        self.pageIndex = 1
+
     def run(self):
         page_index = 1
         form_data = []
         total = self.total + 1
 
+        req = RequestPage()
+
         while page_index < total:
             print('filter content no.%s' % page_index)
-            result = self.gethtml(self.url.format(page_index))
-            res = self.handleElement(result)
+            result = req.get_html(self.url.format(page_index))
+            htl = HTMLStructure(result)
+            res = htl.handle_element()
             form_data.extend(res)
             page_index += 1
             time.sleep(0.2)  # 延时0.1秒; 防止对方服务器得知我们是爬虫
 
         str_data = json.dumps(form_data, ensure_ascii=False)
-        with open('example.json', 'w', encoding="utf-8") as f:
-            f.write(str_data)
+        print(str_data)
+        # with open('example.json', 'w', encoding="utf-8") as f:
+        #     f.write(str_data)
 
-        self.createdHtml(form_data)
+        # self.createdHtml(form_data)
         print('='*60)
         print('over form data')
 

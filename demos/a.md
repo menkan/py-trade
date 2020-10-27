@@ -120,4 +120,298 @@ The area of a circle with radius 2.5 is 19.62
 
 ### List And tuple
 
-> list 是一组有序的集合。 Js中的数组
+> list 是一组*有序*的*集合*。 Js中的数组
+
+```python
+# list attribute.
+
+[].append(content)
+[].insert(idx, content) # 指定位置插入数据
+
+[].pop() # 尾端删除内容
+[].pop(idx) # 指定位置删除内容
+```
+
+```python 
+# tuple 也叫元组
+# WARNNING: 是一个不可变元组 不可改变
+# - 如果只定义一个字符  =>   tuple_a = (1,) # 不这样定义的话会变成数字1. 就失去了元组的特性
+#: 这是因为括号()既可以表示tuple，又可以表示数学公式中的小括号，这就产生了歧义
+
+## "可变"的 Tuple
+#> 其实并没有变化分配的内存并没有变。 只是内存中的值变了而已
+
+tuplea_a = (1, 2, [3, 4])
+# 这样集合中的内容就是可变的了。
+
+# tuple attribute.
+```
+
+### 条件判断
+
+```python
+
+# if
+age = 18
+
+if age >= 10:
+    print('a young person')
+elif age >= 3:
+    print('xxx')
+else:
+    print('a small baby')
+
+
+# input
+# 命令行文本输入
+
+> input('place input content: ')
+```
+
+### 循环
+
+> python 循环有两种
+
+```python
+
+`for..in..`
+    `for n in range(5)`
+
+`while`
+    break # 可以提前退出循环
+    continue # 跳出本次循环前往下次循环
+
+```
+ 
+### dist & set 字典
+
+> dist 全称： dictionary 或其他语言中的map或对象
+使用键值对
+
+无序字典
+
+dist: 
+查找和插入的速度极快，不会随着key的增加而变慢；
+需要占用大量的内存，内存浪费多。
+
+而list相反：
+查找和插入的时间随着元素的增加而增加；
+占用空间小，浪费内存很少。
+
+
+```python
+dist[key] # 不存在会报错
+
+可以通过 key in dist 判断
+或 dist.get(key, defaultValue)
+
+# delete
+
+dist.pop(key)
+
+```
+
+> set 与dist类似也是key&val集合；但不能存储val由于Key的不重复性。所以在set中没有重复的Key.
+
+```python
+
+s = set([1, 2, 3])
+> {1, 2, 3}
+
+s.add(key)
+s.remove(key)
+
+set 一组无顺序、无重复元素的集合
+
+& # 交集
+| # 并集
+
+```
+
+## 函数
+> function
+
+```python
+# python 环境内置函数
+
+help(func) # 帮助命令
+
+abs()
+max(1, 2, 3, 4) # maxValue
+
+# 数据类型转换
+
+int('123')
+float('12.34')
+str(100)
+bool(1) # True
+bool() # False
+
+```
+
+```python
+
+# 定义函数
+def func(n=2):
+    # n=2 默认参数
+    pass
+
+# *可变参数。 不确定传进来的参数是多少个。 
+#> 可变参数允许你传入0个或任意个参数，这些可变参数在函数调用时自动组装为一个tuple。
+def func(*numbers):
+    # *numbers 接受的是一个元组。不可变变量
+    pass
+
+func(1, 2, 3, 4, 5...)
+
+num_arr=[1, 2, 3, 4...]
+func(*num_arr) # 可以这样去
+
+# ==== 关键字参数 ==== 
+
+#> 关键字参数允许你传入0个或任意个含参数名的参数，这些关键字参数在函数内部自动组装为一个dict 
+
+def func(name, age, **kw):
+    print('name', name, 'age', age, 'other', kw)
+
+func('mk', 7, **dist)
+
+# ==== 命名关键字参数 ====
+
+def person(name, age, *, city, job):
+    print(name, age, city, job)
+
+# 和关键字参数**kw不同，命名关键字参数需要一个特殊分隔符*，*后面的参数被视为命名关键字参数。
+
+# 可变参数后边皆是命名关键字
+def person(name, age, *args, city, job):
+    print('name', name, 'age', age, args, 'city', city, 'job', job)
+
+# ==== 参数组合 ==== 
+#> 在Python中定义函数，可以用必选参数、默认参数、可变参数、关键字参数和命名关键字参数，这5种参数都可以组合使用。但是请注意，参数定义的顺序必须是：必选参数、默认参数、可变参数、命名关键字参数和关键字参数
+
+# 必须按照该顺序搞
+
+也可以直接传入tuple&list&dist
+
+# ==== 递归 ====
+
+调用自身就是递归
+
+递归太大会造成栈溢出。 产生报错。 
+优化的话就是采用尾递归方式
+
+```
+
+默认参数一定要是不可变变量。 不然会出现逻辑错误
+***WARNNING: 命名关键词为Python3持有***
+
+## 高级特性
+
+> 代码总是越精简越好
+
+### 切片
+
+集合切片
+
+```python
+list[0:3] # 从0始3终不包括3
+list[:3] # 如果从0开始可以省略0
+
+# 也可以倒数切片
+list[-2:-1]
+
+# 隔位取值
+list[10:20:2]
+12, 14, 16..
+
+# 所有隔5切
+list[::5]
+
+# 原样复制
+list[:]
+
+list & tuple & str 皆可使用切片功能
+```
+
+### 迭代
+
+> 通过For循环进行遍历。 俗称迭代
+
+可迭代list & tuple & dist & set
+
+```python
+for ... in ...:
+    pass
+
+
+# ===========
+# 如何判断一个对象是可迭代对象
+
+# 通过 collections 模块的iterable类型check
+
+from collections import Iterable
+
+isinstance(obj, Iterable)
+> True
+
+# Python内置 enumerate 可以让list存在下标。
+
+for i, value in enumerate(['a', 'b', 'c', 'd']):
+    print(i, value)
+
+
+集合中存在元组
+
+ran=[(1, 2), (3, 4), (5, 6)]
+
+for x, y in ran:
+    print(x, y)
+
+```
+
+### 列表生成式
+
+> 列表生成式即List Comprehensions，是Python内置的非常简单却强大的可以用来创建list的生成式。
+
+```python 
+>>> [x * x for x in range(1, 11)]
+[1, 4, 9, 16, 25, 36, 49, 64, 81, 100]
+
+>>> [x * x for x in range(1, 11) if x % 2 == 0]
+[4, 16, 36, 64, 100]
+
+# 双重For
+>>> [m + n for m in 'ABC' for n in 'XYZ']
+['AX', 'AY', 'AZ', 'BX', 'BY', 'BZ', 'CX', 'CY', 'CZ']
+
+# 列出点前目录下所有内容 => list
+>>> import os # 导入os模块，模块的概念后面讲到
+>>> [d for d in os.listdir('.')] # os.listdir可以列出文件和目录
+['.emacs.d', '.ssh', '.Trash', 'Adlm', 'Applications', 'Desktop', 'Documents', 'Downloads', 'Library', 'Movies', 'Music', 'Pictures', 'Public', 'VirtualBox VMs', 'Workspace', 'XCode']
+
+# 迭代 dist.items() list 元组。
+>>> dis = {'m': 'mmm', 'k': 'kkk', 'j': 'jjj'}
+>>> dis.items()
+[('k', 'kkk'), ('j', 'jjj'), ('m', 'mmm')]
+# 列表生成式
+>>> d = {'x': 'A', 'y': 'B', 'z': 'C' }
+>>> [k + '=' + v for k, v in d.items()]
+['y=B', 'x=A', 'z=C']
+
+# 首字母小写
+>>> L = ['Hello', 'World', 'IBM', 'Apple']
+>>> [s.lower() for s in L]
+['hello', 'world', 'ibm', 'apple']
+
+
+# IF...ELSE
+>>> [x for x in range(1, 11) if x % 2 == 0]
+[2, 4, 6, 8, 10]
+
+>>> [x if x % 2 == 0 else -x for x in range(1, 11)]
+[-1, 2, -3, 4, -5, 6, -7, 8, -9, 10]
+
+```
+
+### 生成器

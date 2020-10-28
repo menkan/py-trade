@@ -415,3 +415,72 @@ for x, y in ran:
 ```
 
 ### 生成器
+
+[generator](https://www.liaoxuefeng.com/wiki/1016959663602400/1017318207388128)
+
+> 列表生成式着实好用。但是存在内存限制(内存是有限的)
+
+Example: 极端例子说如果创建100W个元素的列表。只访问极个别的内容。 其他的内存就浪费了。
+
+```python
+# 创建方式
+
+>>> g = (x * x for x in range(10))
+<generator object <genexpr> at 0x1022ef630>
+# 遍历generator 需要用到For
+for n in g:
+    print(n)
+
+next(g)
+next(g)
+next(g)
+...
+# 会报错。 
+# StopIteration
+
+#> 如果一个函数定义中包含 yield 关键字，那么这个函数就不再是一个普通函数，而是一个generator;
+# 斐波那契数列. generator 方式
+def fib(max):
+    n, a, b = 0, 0, 1
+    while n < max:
+        yield
+        a, b = b, a + b
+        n = n + 1
+    return 'done'
+
+g = fib(6)
+
+# 通过For拿不到 generator 的Error
+>>> g = fib(6)
+>>> while True:
+...     try:
+...         x = next(g)
+...         print('g:', x)
+...     except StopIteration as e:
+...         print('Generator return value:', e.value)
+...         break
+...
+g: 1
+g: 1
+g: 2
+g: 3
+g: 5
+g: 8
+Generator return value: done
+
+
+# 杨辉三角
+
+def yhs(loop=6):
+    n, r = 0, [1]
+    while n < loop:
+        yield r
+        n = n + 1
+        t = [0] + r + [0]
+        r = [t[i] + t[i + 1] for i in range(len(t) - 1)]
+
+```
+
+### 
+
+

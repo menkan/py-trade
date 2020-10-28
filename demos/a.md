@@ -344,7 +344,6 @@ list & tuple & str 皆可使用切片功能
 for ... in ...:
     pass
 
-
 # ===========
 # 如何判断一个对象是可迭代对象
 
@@ -481,6 +480,48 @@ def yhs(loop=6):
 
 ```
 
-### 
+### 迭代器
+
+可以使用For的有 list、tuple、dist、set、str;
+
+一类是集合数据类型，如list、tuple、dict、set、str等；
+
+一类是generator，包括生成器和带yield的generator function。
+
+这些可以直接作用于for循环的对象统称为可迭代对象：Iterable。
+
+判断是否是迭代器
+`from collections.abc import Iterator`
+
+> 可以被next()函数调用并不断返回下一个值的对象称为迭代器：Iterator
+
+```python
+
+isinstance(obj, Iterator);
+
+# 生成器都是 Iterator 对象
+# 把list、dict、str等Iterable变成Iterator可以使用iter()函数
+>>> isinstance(iter([]), Iterator)
+True
+>>> isinstance(iter('abc'), Iterator)
+True
 
 
+```
+凡是可作用于for循环的对象都是Iterable类型；
+
+凡是可作用于next()函数的对象都是Iterator类型，它们表示一个惰性计算的序列；
+
+集合数据类型如list、dict、str等是Iterable但不是Iterator，不过可以通过iter()函数获得一个Iterator对象。
+
+## 函数式编程
+
+### 高阶函数
+#### 函数当参数传入
+#### map & reduce; func
+
+```python 
+map.  # 类似于Js中的 apply方法
+
+
+```

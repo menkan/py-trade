@@ -523,7 +523,135 @@ True
 ```python 
 map.  # 类似于Js中的 apply方法
 
+# Example:
+
+def f(x)
+    return x * x
+
 l = map(f, [1, 2, 3, 4, 5, 6...])
 
 
+# reduce
+from functools import reduce
+
+def add(x, y):
+    return x + y
+l = reduce(add, [1, 2, 3, 4, 5])
+
+def normalize(name):
+    return str(name).lower().?capitalize()
+
+def nomalize(name):
+    return reduce(lambda x, y: x + y.lower(), name.upper())
+
+    
+
+```
+
+#### lambda「匿名函数」
+
+> 不需要像 def funcName 那样定义函数。 
+
+`lambda x, y: x * 10 + y`
+
+#### filter 高阶
+
+> 过滤函数。 类似于js Array.filter()
+
+**WARNNING:**注意到filter()函数返回的是一个`Iterator` 惰性序列 需要使用list(obj)转化
+
+
+#### sorted「排序算法」
+
+> 可以直接对list排序
+
+```python 
+sorted([1,2,23,3,4,45123,12,1])
+
+# sorted()函数也是一个高阶函数，它还可以接收一个key函数来实现自定义的排序，例如按绝对值大小排序：
+>>> sorted([36, 5, -12, 9, -21], key=abs)
+[5, 9, -12, -21, 36]
+
+>>> sorted(['abs', 'bsf', 'cdsa', 'dfa', 'eag'], key=str.lower)
+
+# 要进行反向排序，不必改动key函数，可以传入第三个参数reverse=True：
+
+>>> sorted(['bob', 'about', 'Zoo', 'Credit'], key=str.lower, reverse=True)
+['Zoo', 'Credit', 'bob', 'about']
+
+
+
+```
+
+### 返回函数
+
+> return 出去
+
+返回函数。 会产生`闭包`
+> 不会立马执行而是返回一个新的函数。 再执行就是结果
+
+**WARNNING:** 闭包切记使用循环变量容易引起程序混乱。 
+
+### 匿名函数
+
+`lambda x, y: x * y`
+
+### 装饰器「Decorator」
+
+> 函数在Python中也是对象
+func.__name__ 可以取到函数名称
+
+```python
+
+# HACK - 装饰器不是很理解、无法理解底层如何装饰
+
+# 装饰器
+def log(func):
+    def wrapper(*args, **wk):
+        print('call %s %s():', % (text, func.__name__))
+        return func(*args, **wk)
+    return wrapper
+
+@log
+def now():
+    print('2020-02-22')
+
+or
+
+now = log(now)
+
+
+# === === === ===
+
+def log(text):
+    def decorator(func):
+        def wrapper(*args, **kw):
+            print('%s %s():' % (text, func.__name__))
+            return func(*args, **kw)
+        return wrapper
+    return decorator
+
+@log('execute')
+def now():
+    print('2015-3-25')
+
+or 
+
+now = log('execute)(now)
+
+# @functools.wraps(func)
+# 改变函数wrapper对象的__name__的值。 变成用的函数的名称.
+
+```
+
+### 偏函数
+
+> 自定义一个新的函数。 
+
+```python
+import functools
+
+# 通过 functools.partial 函数制作。
+
+int2 = functools.partial(int, base=2)
 ```

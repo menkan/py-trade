@@ -523,5 +523,7 @@ True
 ```python 
 map.  # 类似于Js中的 apply方法
 
+l = map(f, [1, 2, 3, 4, 5, 6...])
+
 
 ```

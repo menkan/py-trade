@@ -1,27 +1,25 @@
-[TOC]
+[toc]
 
 # 小记
 
-> python 是一门动态语言。 
+> python 是一门动态语言。
 
-## py类型
+## py 类型
 
-* 整数 int
-    - 可以通过`_`去分割特别大的数字 100000 => 10_0000;
-    - 十六进制也可以如此
-* 浮点数 float
-    - 可以用科学计数法表示`1.23e9`
-* 字符串 string
-    - 用单引号或双引号括包裹起来的任意文本内容
-* 布尔值 Boolean - True&False
-    - and、or、not 运算符。
-* None 表示空值-非0;特殊的空值
-* list
-* tuple
-* dict
-* set
-
-
+- 整数 int
+  - 可以通过`_`去分割特别大的数字 100000 => 10_0000;
+  - 十六进制也可以如此
+- 浮点数 float
+  - 可以用科学计数法表示`1.23e9`
+- 字符串 string
+  - 用单引号或双引号括包裹起来的任意文本内容
+- 布尔值 Boolean - True&False
+  - and、or、not 运算符。
+- None 表示空值-非 0;特殊的空值
+- list
+- tuple
+- dict
+- set
 
 ###### 除法
 
@@ -41,16 +39,14 @@
 
 ```
 
-``变量``
+`变量`
 可变的量;
 
-
-``常量``
+`常量`
 
 > python 中用大写字母表示常量内容 `PI = 3.14`
 
 不可变的量
-
 
 ## 字符编码
 
@@ -73,7 +69,7 @@ len('string') # 包含多少字符
 # 统计字符的个数。 如果是bytes格式统计在内存中占了几个字节;
 
 
-# 为保证python能正确解析。 
+# 为保证python能正确解析。
 # 在文件头部书写格式确定
 # ------
 #!/usr/bin/env python3
@@ -82,7 +78,8 @@ len('string') # 包含多少字符
 ```
 
 ### 格式化输出文本。
-> 与C语言相似
+
+> 与 C 语言相似
 
 ```python
 >>> 'Hello, %s' % 'world'
@@ -93,14 +90,14 @@ len('string') # 包含多少字符
 
 ```
 
-Placeholder|Desc|
-:---|---|
-%d|整数
-%s|字符串
-%f|浮点数
-%x|十六进制整数
+| Placeholder | Desc         |
+| :---------- | ------------ |
+| %d          | 整数         |
+| %s          | 字符串       |
+| %f          | 浮点数       |
+| %x          | 十六进制整数 |
 
-> 如果你不太确定应该用什么，%s永远起作用，它会把任何数据类型转换为字符串
+> 如果你不太确定应该用什么，%s 永远起作用，它会把任何数据类型转换为字符串
 
 ```python
 
@@ -120,7 +117,7 @@ The area of a circle with radius 2.5 is 19.62
 
 ### List And tuple
 
-> list 是一组*有序*的*集合*。 Js中的数组
+> list 是一组*有序*的*集合*。 Js 中的数组
 
 ```python
 # list attribute.
@@ -132,7 +129,7 @@ The area of a circle with radius 2.5 is 19.62
 [].pop(idx) # 指定位置删除内容
 ```
 
-```python 
+```python
 # tuple 也叫元组
 # WARNNING: 是一个不可变元组 不可改变
 # - 如果只定义一个字符  =>   tuple_a = (1,) # 不这样定义的话会变成数字1. 就失去了元组的特性
@@ -182,22 +179,21 @@ else:
     continue # 跳出本次循环前往下次循环
 
 ```
- 
+
 ### dist & set 字典
 
-> dist 全称： dictionary 或其他语言中的map或对象
-使用键值对
+> dist 全称： dictionary 或其他语言中的 map 或对象
+> 使用键值对
 
 无序字典
 
-dist: 
-查找和插入的速度极快，不会随着key的增加而变慢；
+dist:
+查找和插入的速度极快，不会随着 key 的增加而变慢；
 需要占用大量的内存，内存浪费多。
 
-而list相反：
+而 list 相反：
 查找和插入的时间随着元素的增加而增加；
 占用空间小，浪费内存很少。
-
 
 ```python
 dist[key] # 不存在会报错
@@ -211,7 +207,7 @@ dist.pop(key)
 
 ```
 
-> set 与dist类似也是key&val集合；但不能存储val由于Key的不重复性。所以在set中没有重复的Key.
+> set 与 dist 类似也是 key&val 集合；但不能存储 val 由于 Key 的不重复性。所以在 set 中没有重复的 Key.
 
 ```python
 
@@ -229,6 +225,7 @@ set 一组无顺序、无重复元素的集合
 ```
 
 ## 函数
+
 > function
 
 ```python
@@ -256,7 +253,7 @@ def func(n=2):
     # n=2 默认参数
     pass
 
-# *可变参数。 不确定传进来的参数是多少个。 
+# *可变参数。 不确定传进来的参数是多少个。
 #> 可变参数允许你传入0个或任意个参数，这些可变参数在函数调用时自动组装为一个tuple。
 def func(*numbers):
     # *numbers 接受的是一个元组。不可变变量
@@ -267,9 +264,9 @@ func(1, 2, 3, 4, 5...)
 num_arr=[1, 2, 3, 4...]
 func(*num_arr) # 可以这样去
 
-# ==== 关键字参数 ==== 
+# ==== 关键字参数 ====
 
-#> 关键字参数允许你传入0个或任意个含参数名的参数，这些关键字参数在函数内部自动组装为一个dict 
+#> 关键字参数允许你传入0个或任意个含参数名的参数，这些关键字参数在函数内部自动组装为一个dict
 
 def func(name, age, **kw):
     print('name', name, 'age', age, 'other', kw)
@@ -287,7 +284,7 @@ def person(name, age, *, city, job):
 def person(name, age, *args, city, job):
     print('name', name, 'age', age, args, 'city', city, 'job', job)
 
-# ==== 参数组合 ==== 
+# ==== 参数组合 ====
 #> 在Python中定义函数，可以用必选参数、默认参数、可变参数、关键字参数和命名关键字参数，这5种参数都可以组合使用。但是请注意，参数定义的顺序必须是：必选参数、默认参数、可变参数、命名关键字参数和关键字参数
 
 # 必须按照该顺序搞
@@ -298,13 +295,13 @@ def person(name, age, *args, city, job):
 
 调用自身就是递归
 
-递归太大会造成栈溢出。 产生报错。 
+递归太大会造成栈溢出。 产生报错。
 优化的话就是采用尾递归方式
 
 ```
 
 默认参数一定要是不可变变量。 不然会出现逻辑错误
-***WARNNING: 命名关键词为Python3持有***
+**_WARNNING: 命名关键词为 Python3 持有_**
 
 ## 高级特性
 
@@ -336,9 +333,9 @@ list & tuple & str 皆可使用切片功能
 
 ### 迭代
 
-> 通过For循环进行遍历。 俗称迭代
+> 通过 For 循环进行遍历。 俗称迭代
 
-可迭代list & tuple & dist & set
+可迭代 list & tuple & dist & set
 
 ```python
 for ... in ...:
@@ -371,9 +368,9 @@ for x, y in ran:
 
 ### 列表生成式
 
-> 列表生成式即List Comprehensions，是Python内置的非常简单却强大的可以用来创建list的生成式。
+> 列表生成式即 List Comprehensions，是 Python 内置的非常简单却强大的可以用来创建 list 的生成式。
 
-```python 
+```python
 >>> [x * x for x in range(1, 11)]
 [1, 4, 9, 16, 25, 36, 49, 64, 81, 100]
 
@@ -419,7 +416,7 @@ for x, y in ran:
 
 > 列表生成式着实好用。但是存在内存限制(内存是有限的)
 
-Example: 极端例子说如果创建100W个元素的列表。只访问极个别的内容。 其他的内存就浪费了。
+Example: 极端例子说如果创建 100W 个元素的列表。只访问极个别的内容。 其他的内存就浪费了。
 
 ```python
 # 创建方式
@@ -434,7 +431,7 @@ next(g)
 next(g)
 next(g)
 ...
-# 会报错。 
+# 会报错。
 # StopIteration
 
 #> 如果一个函数定义中包含 yield 关键字，那么这个函数就不再是一个普通函数，而是一个generator;
@@ -482,18 +479,18 @@ def yhs(loop=6):
 
 ### 迭代器
 
-可以使用For的有 list、tuple、dist、set、str;
+可以使用 For 的有 list、tuple、dist、set、str;
 
-一类是集合数据类型，如list、tuple、dict、set、str等；
+一类是集合数据类型，如 list、tuple、dict、set、str 等；
 
-一类是generator，包括生成器和带yield的generator function。
+一类是 generator，包括生成器和带 yield 的 generator function。
 
-这些可以直接作用于for循环的对象统称为可迭代对象：Iterable。
+这些可以直接作用于 for 循环的对象统称为可迭代对象：Iterable。
 
 判断是否是迭代器
 `from collections.abc import Iterator`
 
-> 可以被next()函数调用并不断返回下一个值的对象称为迭代器：Iterator
+> 可以被 next()函数调用并不断返回下一个值的对象称为迭代器：Iterator
 
 ```python
 
@@ -508,19 +505,22 @@ True
 
 
 ```
-凡是可作用于for循环的对象都是Iterable类型；
 
-凡是可作用于next()函数的对象都是Iterator类型，它们表示一个惰性计算的序列；
+凡是可作用于 for 循环的对象都是 Iterable 类型；
 
-集合数据类型如list、dict、str等是Iterable但不是Iterator，不过可以通过iter()函数获得一个Iterator对象。
+凡是可作用于 next()函数的对象都是 Iterator 类型，它们表示一个惰性计算的序列；
+
+集合数据类型如 list、dict、str 等是 Iterable 但不是 Iterator，不过可以通过 iter()函数获得一个 Iterator 对象。
 
 ## 函数式编程
 
 ### 高阶函数
+
 #### 函数当参数传入
+
 #### map & reduce; func
 
-```python 
+```python
 map.  # 类似于Js中的 apply方法
 
 # Example:
@@ -544,28 +544,27 @@ def normalize(name):
 def nomalize(name):
     return reduce(lambda x, y: x + y.lower(), name.upper())
 
-    
+
 
 ```
 
 #### lambda「匿名函数」
 
-> 不需要像 def funcName 那样定义函数。 
+> 不需要像 def funcName 那样定义函数。
 
 `lambda x, y: x * 10 + y`
 
 #### filter 高阶
 
-> 过滤函数。 类似于js Array.filter()
+> 过滤函数。 类似于 js Array.filter()
 
-**WARNNING:**注意到filter()函数返回的是一个`Iterator` 惰性序列 需要使用list(obj)转化
-
+**WARNNING:**注意到 filter()函数返回的是一个`Iterator` 惰性序列 需要使用 list(obj)转化
 
 #### sorted「排序算法」
 
-> 可以直接对list排序
+> 可以直接对 list 排序
 
-```python 
+```python
 sorted([1,2,23,3,4,45123,12,1])
 
 # sorted()函数也是一个高阶函数，它还可以接收一个key函数来实现自定义的排序，例如按绝对值大小排序：
@@ -588,9 +587,10 @@ sorted([1,2,23,3,4,45123,12,1])
 > return 出去
 
 返回函数。 会产生`闭包`
+
 > 不会立马执行而是返回一个新的函数。 再执行就是结果
 
-**WARNNING:** 闭包切记使用循环变量容易引起程序混乱。 
+**WARNNING:** 闭包切记使用循环变量容易引起程序混乱。
 
 ### 匿名函数
 
@@ -598,8 +598,8 @@ sorted([1,2,23,3,4,45123,12,1])
 
 ### 装饰器「Decorator」
 
-> 函数在Python中也是对象
-func.__name__ 可以取到函数名称
+> 函数在 Python 中也是对象
+> func.**name** 可以取到函数名称
 
 ```python
 
@@ -635,7 +635,7 @@ def log(text):
 def now():
     print('2015-3-25')
 
-or 
+or
 
 now = log('execute)(now)
 
@@ -646,7 +646,7 @@ now = log('execute)(now)
 
 ### 偏函数
 
-> 自定义一个新的函数。 
+> 自定义一个新的函数。
 
 ```python
 import functools
@@ -660,8 +660,8 @@ int2 = functools.partial(int, base=2)
 
 ## 模块
 
-> 在计算机程序的开发过程中，随着程序代码越写越多，在一个文件里代码就会越来越长，越来越不容易维护。              
-> 为了编写可维护的代码，我们把很多函数分组，分别放到不同的文件里，这样，每个文件包含的代码就相对较少，很多编程语言都采用这种组织代码的方式。在Python中，一个.py文件就称之为一个模块（Module）。
+> 在计算机程序的开发过程中，随着程序代码越写越多，在一个文件里代码就会越来越长，越来越不容易维护。  
+> 为了编写可维护的代码，我们把很多函数分组，分别放到不同的文件里，这样，每个文件包含的代码就相对较少，很多编程语言都采用这种组织代码的方式。在 Python 中，一个.py 文件就称之为一个模块（Module）。
 
 **WARNNING:**确保不会与内置函数名重复即可。
 
@@ -671,6 +671,134 @@ mycompany   # package 包名称
 ├─ __init__.py # mycompany的主[int]模块
 ├─ abc.py   # 包里里面的abc模块
 └─ xyz.py   # 包里里面的xyz模块
+
+
+```
+
+#### 安装模块
+
+```python
+
+# 查看当前python安装第三方模块的路径
+# python 查看第三方目录会在已存在的目录中搜索。
+import sys
+sys.path
+
+# 可以添加自己的第三方模块目录
+sys.path.append('/path/path/path/path')
+```
+
+## 面向对象编程
+
+> 面向对象编程——Object Oriented Programming，简称 OOP，是一种程序设计思想。OOP 把对象作为程序的基本单元，一个对象包含了数据和操作数据的函数。
+
+```python
+
+class Student(object):
+
+    def __init__(self, name, score):
+        self.name = name
+        self.score = score
+
+    def print_score(self):
+        print('that %sm of score: %s' % (self.name, self.score))
+
+stud1 = Student('menk', 99)
+
+stud1.print_score()
+
+# 可以添加属性名称与密码
+
+stud1.name = 'deoc' # 可以自己手动添加属性名称;
+
+# 在类中Class中。 所有的函数第一个参数都是self;实例自身
+
+```
+
+### 数据封装.
+
+> `class`类中、自定义函数
+
+### 访问限制。
+
+> 在 Class 内部，可以有属性和方法，而外部代码可以通过直接调用实例变量的方法来操作数据，这样，就隐藏了内部的复杂逻辑。
+
+```python
+
+# 如果要让内部属性不被外部访问，可以把属性的名称前加上两个下划线__，在Python中，实例的变量名如果以__开头，就变成了一个私有变量（private），只有内部可以访问，外部不能访问
+
+class Student(Object):
+
+    def __init__(self, name, score):
+        self.__name = name
+        self.__score = score
+
+    def __func(self):
+        pass
+
+# 以双划线开头的是隐私变量 private. 
+
+# 以双划线开头  & 结尾的是特殊变量
+
+```
+
+### 继承 & 多态。
+
+```python
+
+# 继承
+
+class Animal(object):
+    
+    def run():
+        pass
+
+# 多态（多种状态）
+# 子类与基类共同存在某个方法时。 子类会覆盖基类的方法。 这就是多态
+
+# 判断一个变量是否是某个类型可以用isinstance()判断：
+
+>>> isinstance(a, list)
+True
+
+
+# 不用管原来的代码是如何调用的。这就是著名的“开闭”原则：
+# 对扩展开放：允许新增Animal子类；
+# 对修改封闭：不需要修改依赖Animal类型的run_twice()等函数。
+
+
+# 这就是动态语言的“鸭子类型”，它并不要求严格的继承体系，一个对象只要“看起来像鸭子，走起路来像鸭子”，那它就可以被看做是鸭子。
+
+# Python的“file-like object“就是一种鸭子类型。对真正的文件对象，它有一个read()方法，返回其内容。但是，许多对象，只要有read()方法，都被视为“file-like object“。许多函数接收的参数就是“file-like object“，你不一定要传入真正的文件对象，完全可以传入任何实现了read()方法的对象。
+
+# 小结
+# 继承可以把父类的所有功能都直接拿过来，这样就不必重零做起，子类只需要新增自己特有的方法，也可以把父类不适合的方法覆盖重写。
+
+# 动态语言的鸭子类型特点决定了继承不像静态语言那样是必须的。
+
+```
+
+### 获取对象信息.
+
+> ??? 当我们拿到一个对象的引用时，如何知道这个对象是什么类型、有哪些方法呢？
+
+```python
+
+>>> type(123)
+<class 'int'>
+
+>>> type(None)
+<type(None) 'NoneType'>
+
+# 如果一个变量指向函数或者类，也可以用type()判断：
+
+>>> type(abs)
+<class 'builtin_function_or_method'>
+>>> type(a)
+<class '__main__.Animal'>
+
+
+
 
 
 ```

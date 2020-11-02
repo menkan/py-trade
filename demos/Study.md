@@ -883,3 +883,6 @@ s.set_age = MethodType(set_age, s) # 给实例绑定一个方法
 ```
 
 ***WARNNING tips:*** 对一个实例绑定方法;对其他实例不产生影响与变化。
+
+
+

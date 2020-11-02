@@ -862,3 +862,24 @@ hasattr(objStance, key)
 
 > === 我们会讨论多重继承、定制类、元类等概念。
 
+### __slots__
+
+*给实例定义一个方法*
+
+```python
+
+class S():
+    pass
+
+def set_age(self, age):
+    self.age = age
+
+from types import MethodType
+
+s = S()
+
+s.set_age = MethodType(set_age, s) # 给实例绑定一个方法
+
+```
+
+***WARNNING tips:*** 对一个实例绑定方法;对其他实例不产生影响与变化。

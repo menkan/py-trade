@@ -672,7 +672,6 @@ mycompany   # package 包名称
 ├─ abc.py   # 包里里面的abc模块
 └─ xyz.py   # 包里里面的xyz模块
 
-
 ```
 
 #### 安装模块
@@ -714,7 +713,6 @@ stud1.name = 'deoc' # 可以自己手动添加属性名称;
 # 在类中Class中。 所有的函数第一个参数都是self;实例自身
 
 ```
-
 ### 数据封装.
 
 > `class`类中、自定义函数
@@ -798,7 +796,69 @@ True
 <class '__main__.Animal'>
 
 
+# change
+
+# types 可以判断复杂引用类型。
+# Example func 是否相同
+import types
+
+>>> type(func) == types.functionType
+True
+
+>>>type(abs) == types.BuiltinFunctionType # 是否是内置函数
+
+>>> type(lambda x: x)==types.LambdaType # 是否是匿名函数
+
+>>> type(g) == types.generatorType # 是否是高阶函数-生成器
+
+# 关于对象的继承 isinstance();
+# 判断Class是否是被继承的内容。
+# 尽可能用isinstance()去判断对其类型“一网打尽”
+
+# === ==== 
+
+# dir() 可以获得内容的所有属性和方法. 
+>>> dir('aa')
+['__add__', '__class__', '__contains__', '__delattr__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__getitem__', '__getnewargs__', '__getslice__', '__gt__', '__hash__', '__init__', '__le__', '__len__', '__lt__', '__mod__', '__mul__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__rmod__', '__rmul__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__', '_formatter_field_name_split', '_formatter_parser', 'capitalize', 'center', 'count', 'decode', 'encode', 'endswith', 'expandtabs', 'find', 'format', 'index', 'isalnum', 'isalpha', 'isdigit', 'islower', 'isspace', 'istitle', 'isupper', 'join', 'ljust', 'lower', 'lstrip', 'partition', 'replace', 'rfind', 'rindex', 'rjust', 'rpartition', 'rsplit', 'rstrip', 'split', 'splitlines', 'startswith', 'strip', 'swapcase', 'title', 'translate', 'upper', 'zfill']
 
 
+# 类似__xxx__的属性和方法在Python中都是有特殊用途的
+# 另外我们可以覆盖类中的原有函数
 
+class Myobj():
+    def __len__():
+        return 100
+    
+h = Myobj()
+
+>> len(h)
+100
+
+
+# 只获取还是对象的属性方法还是不够的。 还有可以获取、设置、判断是否存在
+# getattr()\setattr()\hasattr()
+
+getattr(obj实例, key, defaultValue) # 可以获取属性Key. 如果不存在可以取值defaultValue
+# 不然会报错。 AttributeError.
+
+
+setattr(obj实例, key, Val)
+
+hasattr(objStance, key)
 ```
+
+### 实例属性 & 类属性
+
+> ? 实例属性与类属性如果存在属性名称相同值不同就会存在未知的错误❌。 禁止使类属性名称与实例属性名称相同的Name.
+
+* 实例属性属于各个实例所有，互不打扰
+* 类属性属于类所有, 所有实例共享同一属性
+* 不要对实例属性和类属性使用相同的名称否则将产生***难以发现***的错误
+
+
+## 面向对象高级编程
+
+> 数据封装、继承和多态只是面向对象程序设计中最基础的3个概念。
+
+> === 我们会讨论多重继承、定制类、元类等概念。
+

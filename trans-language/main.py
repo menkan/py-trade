@@ -1,9 +1,9 @@
 # encoding: utf-8
-# Created by menkan on 20200528
-# Email: xtz17515@163.com
+# @Created by menkan on 20200528
+# @Email: xtz17515@163.com
 # @Description: 命令行版中文转英文翻译；
-# 参考： https://blog.csdn.net/weixin_40074227/article/details/104238335
-# need -> pip install requests, PyExecJS
+# @Reference: https://blog.csdn.net/weixin_40074227/article/details/104238335
+# Need -> pip install requests, PyExecJS
 
 import requests
 import re

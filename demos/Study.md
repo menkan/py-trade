@@ -1,4 +1,4 @@
-[toc]
+[TOC]
 
 # 小记
 
@@ -883,6 +883,331 @@ s.set_age = MethodType(set_age, s) # 给实例绑定一个方法
 ```
 
 ***WARNNING tips:*** 对一个实例绑定方法;对其他实例不产生影响与变化。
+可以对Class类进行绑定属性与方法、这样所有的实例对象都会存在类中存在的属性和方法;
+
+
+*如果这个时候我们想限制实例属性注入的属性名称与方法。可以通过__solts__去设置*
+
+```python
+
+class Abc():
+    __slots__ = ('name', 'age') # 通过tuple定义允许绑定的属性名称。
+
+a = Abc()
+
+a.name = 'marks'
+
+>>> a.score = 99
+
+AttributeError: 'Student' object has no attribute 'score'.
+
+# 错误绑定会收错误。 AttributeError
+
+```
+
+***WARNNING Tips:*** 定义`__slots__`仅对当前类实例有效果、对继承子类不起作用。
+除非在子类中也定义`__slots__`，这样，子类实例允许定义的属性就是自身的`__slots__`加上父类的`__slots__`
+
+### @property
+
+> 属性名称禁止被实例随意赋值修改内容。可以通过`@property`装饰器去约定该内容
+
+```python
+
+class Student(object):
+
+    @property # 这样设置过后该方法可以通过属性名的方式调用  student.score
+    def score(self):
+        return self.score or 0
+    
+    @score.setter # 设置装饰器 score的设置方法。 score.setter
+    def score(self, val):
+        self.score = val
+    
+    # 定义只读属性就是只定义属性不去定义设置方法就是制度属性
+
+```
+
+### 多重继承
+
+> 多重继承及多次继承、继承多次内容等。
+
+#### MixIn
+
+> 在设计类的继承关系时，通常，主线都是单一继承下来的，例如，Ostrich继承自Bird。但是，如果需要“混入”额外的功能，通过多重继承就可以实现，比如，让Ostrich除了继承自Bird外，再同时继承Runnable。这种设计通常称之为MixIn。
+
+> MixIn的目的就是给一个类增加多个功能，这样，在设计类的时候，我们优先考虑通过多重继承来组合多个MixIn的功能，而不是设计多层次的复杂的继承关系
+
+```python
+
+class Animal(object):
+    pass
+
+class RouMixin(Animal):
+    pass
+
+class Dog(Animal, RouMixin):
+    pass
+
+```
+
+### 定制类
+
+[click into info](https://www.liaoxuefeng.com/wiki/1016959663602400/1017590712115904)
+
+> 已知`__slots__`、`__str__`、`__len__`在类中具有特殊意义
+
+```python
+
+>>> print(Student('Michael'))
+<__main__.Student object at 0x109afb190> # 默认打印内存地址
+
+
+class Student(object):
+    __slots__ = ('name', 'age', 'sex')
+
+    def __init__(self, name):
+        self.name = name
+
+    def __str__(self):
+        return 'Student object (name: %s)' % self.name
+
+>>> print(Student('Michael'))
+Student object (name: Michael) # 通过类中`__str__`可以定制输出内容
+
+
+# 这是因为直接显示变量调用的不是__str__()，而是__repr__()，两者的区别是__str__()返回用户看到的字符串，而__repr__()返回程序开发者看到的字符串，也就是说，__repr__()是为调试服务的。
+# 解决办法是再定义一个__repr__()。但是通常__str__()和__repr__()代码都是一样的，所以，有个偷懒的写法
+
+...
+def __str__(self):
+        return 'Student object (name=%s)' % self.name
+    __repr__ = __str__ # 让函数__repr__与__str__相同。
+...
+
+# ===  __iter__
+# > 如果一个类想被用于for ... in循环，类似list或tuple那样，就必须实现一个__iter__()方法，该方法返回一个迭代对象，然后，Python的for循环就会不断调用该迭代对象的__next__()方法拿到循环的下一个值，直到遇到StopIteration错误时退出循环。
+
+
+# Example:
+# 斐波那契数列为例，写一个Fib类，可以作用于for循环
+class Fib(object):
+    def __init__(self):
+        self.a, self.b = 0, 1 # 初始化两个计数器a，b
+
+    def __iter__(self):
+        return self # 实例本身就是迭代对象，故返回自己
+
+    def __next__(self):
+        self.a, self.b = self.b, self.a + self.b # 计算下一个值
+        if self.a > 100000: # 退出循环的条件
+            raise StopIteration()
+        return self.a # 返回下一个值
+
+>>> for n in Fib():
+...     print(n)
+...
+1
+1
+2
+3
+5
+...
+46368
+75025
+
+# === __getitem__
+# > Fib实例虽然能作用于for循环，看起来和list有点像，但是，把它当成list来使用还是不行，比如，取第5个元素：
+# 要表现得像list那样按照下标取出元素，需要实现__getitem__()方法：
+
+class Fib(object):
+    def __getitem__(self, n):
+        a, b = 1, 1
+        for x in range(n):
+            a, b = b, a + b
+        return a
+
+>>> f = Fib()
+>>> f[0]
+1
+>>> f[1]
+1
+>>> f[2]
+2
+>>> f[3]
+3
+>>> f[10]
+89
+>>> f[100]
+573147844013817084101
+
+但是list有个神奇的切片方法：
+>>> list(range(100))[5:10]
+[5, 6, 7, 8, 9]
+对于Fib却报错。原因是__getitem__()传入的参数可能是一个int，也可能是一个切片对象slice，所以要做判断：
+
+class Fib(object):
+    def __getitem__(self, n):
+        if isinstance(n, int): # n是索引
+            a, b = 1, 1
+            for x in range(n):
+                a, b = b, a + b
+            return a
+        if isinstance(n, slice): # n是切片
+            start = n.start
+            stop = n.stop
+            if start is None:
+                start = 0
+            a, b = 1, 1
+            L = []
+            for x in range(stop):
+                if x >= start:
+                    L.append(a)
+                a, b = b, a + b
+            return L
+
+# === 与之对应的是__setitem__()方法，把对象视作list或dict来对集合赋值。最后，还有一个__delitem__()方法，用于删除某个元素。
+
+# === __getattr__
+> 可以用这个方法定义返回内容。 假设不存在该属性方法可以直接放回None.
+
+def __getattr__(self, attr):
+        if attr=='score':
+            return 99
+
+# 可以定义抛出错误、抛出属性错误
+
+ def __getattr__(self, attr):
+        if attr=='age':
+            return lambda: 25
+        raise AttributeError('\'Student\' object has no attribute \'%s\'' % attr)
+
+# === __call__
+# > 类似于调用自身实例对象
+
+class Abc(object):
+    def __init__(self, name):
+        self.name = name
+
+    def __call__(self):
+        print('My name is %s.' % self.name)
+
+a = Abc('aaa')
+
+a() # print => xxx
+
+
+# ？？？？？ 怎么判断一个变量是对象还是函数呢？
+# 能被调用的对象就是一个Callable对象
+>>> callable(Student())
+True
+>>> callable(max)
+True
+>>> callable([1, 2, 3])
+False
+>>> callable(None)
+False
+>>> callable('str')
+False
+
+# 通过callable()函数，我们就可以判断一个对象是否是“可调用”对象
+
+
+```
+
+### 使用枚举类
+
+> 定义不可变枚举采用类的方式
+
+```python
+
+from enum import Enum
+
+Month = Enum('Month', ('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'))
+
+for name, member in Month.__members__.items():
+    print(name, '=>', member, ',', member.value)
+
+# === 如果需要更精确地控制枚举类型，可以从Enum派生出自定义类：
+form enum import Enum, unique
+
+@unique
+class Weekday(Enum):
+    Sun = 0 # Sun的value被设定为0
+    Mon = 1
+    Tue = 2
+    Wed = 3
+    Thu = 4
+    Fri = 5
+    Sat = 6
+
+>>> Weekday['Sun'] # Weekday.Sun
+>>> Weekday['Sun'].value # 0
+
+```
+
+### 使用元类
+
+
+```python 
+
+# type()
+# type()函数可以查看一个类型或变量的类型，Hello是一个class，它的类型就是type，而h是一个实例，它的类型就是class Hello。
+>>> class Abc(object):
+...     pass
+...
+>>> type(1)
+<type 'int'>
+>>> type(Abc)
+<type 'type'>
+>>> a = Abc()
+>>> type(a)
+<class '__main__.Abc'>
+
+# 我们可以通过type()函数创建出Hello类
+>>> def fn(self, name='w'):
+...     print('Hello, %s.' % name)
+...
+>>> Hello = type('Hello', (object,), dict(hello=fn))
+>>> h=Hello()
+>>> h.hello()
+Hello, w.
+>>> type(Hello)
+<type 'type'>
+>>> type(h)
+<class '__main__.Hello'>
+
+# 要创建一个class对象，type()函数依次传入3个参数：
+# class的名称；
+# 继承的父类集合，注意Python支持多重继承，如果只有一个父类，别忘了tuple的单元素写法；
+# class的方法名称与函数绑定，这里我们把函数fn绑定到方法名hello上。
+
+# === metaclass
+# LINK -- https://www.liaoxuefeng.com/wiki/1016959663602400/1017592449371072
+# metaclass，直译为元类，
+# 除了使用type()动态创建类以外，要控制类的创建行为，还可以使用metaclass。
+
+# 定义ListMetaclass，按照默认习惯，metaclass的类名总是以Metaclass结尾，以便清楚地表示这是一个metaclass：
+
+# metaclass是类的模板，所以必须从`type`类型派生：
+class ListMetaclass(type):
+    def __new__(cls, name, bases, attrs):
+        attrs['add'] = lambda self, value: self.append(value)
+        return type.__new__(cls, name, bases, attrs)
+
+class MyList(list, metaclass=ListMetaclass):
+    pass
+
+# 当我们传入关键字参数metaclass时，魔术就生效了，它指示Python解释器在创建MyList时，要通过ListMetaclass.__new__()来创建，在此，我们可以修改类的定义，比如，加上新的方法，然后，返回修改后的定义。
+
+# __new__()方法接收到的参数依次是：
+# 当前准备创建的类的对象；
+# 类的名字；
+# 类继承的父类集合；
+# 类的方法集合。
+
+```
 
 
 
+## 错误、调试和测试

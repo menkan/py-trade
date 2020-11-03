@@ -1339,5 +1339,134 @@ Traceback (most recent call last):
     raise FooError('invalid value: %s' % s)
 __main__.FooError: invalid value: 0
 
+
+raise 可以抛出自定义错误类型
+
+如果py内置错误提示满足、尽可能采用内置错误表达式
+
+# *Tips
+在except错误代码段中继续通过 raise抛出错误、可以改变错误类型；
+But. 决不应该把一个IOError转换成毫不相干的ValueError。
+
 ```
 
+##### 测试
+
+> 调试Bugs 如何做
+
+* 通过print打印错误
+* 断言?(assert)代替print
+* logging
+* pdb
+* IDE
+
+
+```py
+def foo(s):
+    n = int(s)
+    assert n != 0, 'n is zero!'
+    return 10 / n
+
+def main():
+    foo('0')
+
+# 如果断言失败，assert语句本身就会抛出AssertionError：
+$ python err.py
+Traceback (most recent call last):
+...
+AssertionError: n is zero!
+
+# 程序中如果到处充斥着assert，和print()相比也好不到哪去。不过，启动Python解释器时可以用-O参数来关闭assert：
+
+$ python -o x.py
+```
+
+```py
+import logging
+logging.basicConfig(level=logging.INFO)
+
+# 这就是logging的好处，它允许你指定记录信息的级别，有debug，info，warning，error等几个级别，当我们指定level=INFO时，logging.debug就不起作用了。同理，指定level=WARNING后，debug和info就不起作用了。这样一来，你可以放心地输出不同级别的信息，也不用删除，最后统一控制输出哪个级别的信息。
+
+# logging的另一个好处是通过简单的配置，一条语句可以同时输出到不同的地方，比如console和文件。
+
+s = '0'
+n = int(s)
+logging.info('n = %d' % n)
+print(10 / n)
+
+```
+
+
+```py
+# 第4种方式是启动Python的调试器pdb，让程序以单步方式运行，可以随时查看运行状态。我们先准备好程序：
+
+# err.py
+s = '0'
+n = int(s)
+print(10 / n)
+
+
+$ python -m pdb err.py
+> /Users/michael/Github/learn-python3/samples/debug/err.py(2)<module>()
+-> s = '0'
+
+# 以参数-m pdb启动后，pdb定位到下一步要执行的代码-> s = '0'。输入命令l来查看代码：
+
+(Pdb) l
+  1     # err.py
+  2  -> s = '0'
+  3     n = int(s)
+  4     print(10 / n)
+
+# 输入命令n可以单步执行代码
+
+(Pdb) n
+> /Users/michael/Github/learn-python3/samples/debug/err.py(3)<module>()
+-> n = int(s)
+(Pdb) n
+> /Users/michael/Github/learn-python3/samples/debug/err.py(4)<module>()
+-> print(10 / n)
+
+# 任何时候都可以输入命令p 变量名来查看变量：
+
+(Pdb) p s
+'0'
+(Pdb) p n
+0
+# 输入命令q结束调试，退出程序：
+(Pdb) q
+
+# 这种通过pdb在命令行调试的方法理论上是万能的，但实在是太麻烦了，如果有一千行代码，要运行到第999行得敲多少命令啊。还好，我们还有另一种调试方法。
+
+# pdb.set_trace()
+
+# 这个方法也是用pdb，但是不需要单步执行，我们只需要import pdb，然后，在可能出错的地方放一个pdb.set_trace()，就可以设置一个断点
+
+# err.py
+import pdb
+
+s = '0'
+n = int(s)
+pdb.set_trace() # 运行到这里会自动暂停
+print(10 / n)
+
+# 运行代码，程序会自动在pdb.set_trace()暂停并进入pdb调试环境，可以用命令p查看变量，或者用命令c继续运行：
+
+$ python err.py 
+> /Users/michael/Github/learn-python3/samples/debug/err.py(7)<module>()
+-> print(10 / n)
+(Pdb) p n
+0
+(Pdb) c
+Traceback (most recent call last):
+  File "err.py", line 7, in <module>
+    print(10 / n)
+ZeroDivisionError: division by zero
+
+
+```
+
+### 单元测试
+
+> 如果你听说过“测试驱动开发”（TDD：Test-Driven Development），单元测试就不陌生。                
+> 单元测试是用来对一个模块、一个函数或者一个类来进行正确性检验的测试工作。

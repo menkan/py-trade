@@ -91,12 +91,70 @@ with open('/Users/michael/test.txt', 'w') as f:
   f.write('Hello, world!')
 
 # 要写入特定编码的文本文件，请给open()函数传入encoding参数，将字符串自动转换成指定编码。
-
 如果通过 w写入文件会覆盖内容
-
 需要通过 a追加文件
 
+```
 
+### StringIO and BytesIO
 
+[click to view](https://www.liaoxuefeng.com/wiki/1016959663602400/1017609424203904)
+
+StringIo 算是内存Io
+StringIO顾名思义就是在内存中读写str。
+
+```py
+from io import StringIO
+
+f = StringIO() # 实例f内存IO对象
+
+>>> f.write('hello')
+5
+
+>>> f.write(' ')
+1
+
+>>> f.write('world!')
+6
+
+>>> print(f.getvalue()) # f.getvalue() 获取f实例内存中全部数据;
+hello world!
+
+# --- string.strip() # 获取本行内容去掉换行符好
+
+>>> from io import StringIO
+>>> f = StringIO('Hello!\nHi!\nGoodbye!')
+>>> while True:
+...     s = f.readline()
+...     if s == '':
+...         break
+...     print(s.strip())
+...
+Hello!
+Hi!
+Goodbye!
 
 ```
+
+```py
+# BytesIO
+# 二进制数据，就需要使用BytesIO。
+# BytesIO实现了在内存中读写bytes，我们创建一个BytesIO，然后写入一些bytes：
+
+>>> from io import BytesIO
+>>> f = BytesIO()
+>>> f.write('中文'.encode('utf-8')) # 写入的不是str 而是通过encode进行编码的bytesIo
+6
+>>> print(f.getvalue())
+b'\xe4\xb8\xad\xe6\x96\x87'
+
+# 和StringIO类似，可以用一个bytes初始化BytesIO，然后，像读文件一样读取：
+
+>>> from io import BytesIO
+>>> f = BytesIO(b'\xe4\xb8\xad\xe6\x96\x87')
+>>> f.read()
+b'\xe4\xb8\xad\xe6\x96\x87'
+
+```
+
+### 操作文件与目录

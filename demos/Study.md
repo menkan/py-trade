@@ -1470,3 +1470,146 @@ ZeroDivisionError: division by zero
 
 > 如果你听说过“测试驱动开发”（TDD：Test-Driven Development），单元测试就不陌生。                
 > 单元测试是用来对一个模块、一个函数或者一个类来进行正确性检验的测试工作。
+
+```py
+
+# 自定义类。
+# mydict.py
+class Dict(dict):
+    def __init__(self, **kw):
+        super().__init__(**kw)
+    
+    def __getatter__(self, key):
+        try:
+            return self[key]
+        except KeyError:
+            raise AttributeError(r"'Dict' object has no attribute %s" % key)
+    
+    def __setattr__(self, key, val):
+        self[key] = val
+
+```
+
+
+> py自带的unittest单元测试模块
+
+```py
+# mydict_test.py
+
+import unittest
+
+form mydict import Dict
+
+class TestDict(unittest.TestCase):
+    
+    def test_init(self):
+        d = Dict(a=1, b='test')
+        self.assertEqual(d.a, 1) # assertEqual 断言相等
+        self.assertEqual(d.b, 'test')
+        self.assertTrue(isinstance(d, dict)) # 断言True
+    
+    def test_key(self):
+        d = Dict()
+        d['key'] = 'value'
+        self.assertEqual(d.key, 'value')
+    
+    def test_attr(self):
+        d = Dict()
+        d.key = 'value'
+        self.assertTrue('key' in d)
+        self.assertEqual(d['key'], 'value')
+    
+    # 断言抛出KeyError
+    def test_keyerror(self):
+        d = Dict()
+        with self.assertRaises(KeyError):
+            value = d['empty']
+    
+    # 断言抛出AttributeError
+    def test_attrerror(self):
+        d = Dict()
+        with self.assertRaises(AttributeError):
+            value = d.empty
+
+
+# 运行单元测试
+
+# 命令行运行mydict_test.py
+if __name__ == '__main__':
+    unittest.main()
+
+# or
+
+$ python -m unittest mydict_test
+.....
+----------------------------------------------------------------------
+Ran 5 tests in 0.000s
+
+OK
+
+
+# ==== 
+
+# setUp与tearDown
+# > 可以在单元测试中编写两个特殊的setUp()和tearDown()方法。这两个方法会分别在每调用一个测试方法的前后分别被执行。
+
+class TestDict(unittest.TestCase):
+
+    def setUp(self):
+        print('setUp...')
+
+    # ... more func
+
+
+    def tearDown(self):
+        print('tearDown...')
+
+
+
+# EXAMPLE ========================
+class Student(object):
+    def __init__(self, name, score):
+        self.name = name
+        self.score = score
+    def get_grade(self):
+        if self.score >= 80 and self.score <= 100: 
+            return 'A'
+        elif self.score >= 60 and self.score <= 79:
+            return 'B'
+        elif self.score < 60 and self.score >= 0:
+            return 'C'
+        else:
+            raise ValueError
+
+class TestStudent(unittest.TestCase):
+
+    def test_80_to_100(self):
+        s1 = Student('Bart', 80)
+        s2 = Student('Lisa', 100)
+        self.assertEqual(s1.get_grade(), 'A')
+        self.assertEqual(s2.get_grade(), 'A')
+
+    def test_60_to_80(self):
+        s1 = Student('Bart', 60)
+        s2 = Student('Lisa', 79)
+        self.assertEqual(s1.get_grade(), 'B')
+        self.assertEqual(s2.get_grade(), 'B')
+
+    def test_0_to_60(self):
+        s1 = Student('Bart', 0)
+        s2 = Student('Lisa', 59)
+        self.assertEqual(s1.get_grade(), 'C')
+        self.assertEqual(s2.get_grade(), 'C')
+
+    def test_invalid(self):
+        s1 = Student('Bart', -1)
+        s2 = Student('Lisa', 101)
+        with self.assertRaises(ValueError):
+            s1.get_grade()
+        with self.assertRaises(ValueError):
+            s2.get_grade()
+
+if __name__ == '__main__':
+    unittest.main()
+
+```

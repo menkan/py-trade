@@ -158,3 +158,97 @@ b'\xe4\xb8\xad\xe6\x96\x87'
 ```
 
 ### 操作文件与目录
+
+> 操作文件目录。 内置存在操作目录的模块与方法;
+
+```py
+import os # 操作文件目录内容.
+
+>>> os.name # 操作系统名称
+'posix'
+
+# 如果是posix，说明系统是Linux、Unix或Mac OS X，如果是nt，就是Windows系统。
+
+>>> os.uname() # 输出详细信息。 Window不支持该函数。
+
+# 环境变量
+>>> os.environ
+environ({'TERM_SESSION_ID': 'w0t0p0:1DFD9215-DE7C-41E2-8C5E-902B60E4833D', 'SSH_AUTH_SOCK': '/private/tmp/com.apple.launchd.dZn1tn6t9s/Listeners', 'LC_TERMINAL_VERSION': '3.3.12', 'COLORFGBG': '7;0', 'ITERM_PROFILE': 'Default', 'XPC_FLAGS': '0x0', 'PWD': '/Users/xutongze/Documents/menkan/py-trade', 'SHELL': '/bin/zsh', 'SECURITYSESSIONID': '186c8', 'LC_CTYPE': 'UTF-8', 'TERM_PROGRAM_VERSION': '3.3.12', 'TERM_PROGRAM': 'iTerm.app', 'PATH': '/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin', 'LC_TERMINAL': 'iTerm2', 'COLORTERM': 'truecolor', 'TERM': 'xterm-256color', 'HOME': '/Users/xutongze', 'TMPDIR': '/var/folders/c1/28qsr99x3dzcwty9bs39k68h0000gn/T/', 'USER': 'xutongze', 'XPC_SERVICE_NAME': '0', 'LOGNAME': 'xutongze', 'LaunchInstanceID': 'CA1D5A77-84A3-40D8-ACFE-EBA382781300', 'ITERM_SESSION_ID': 'w0t0p0:1DFD9215-DE7C-41E2-8C5E-902B60E4833D', '__CF_USER_TEXT_ENCODING': '0x1F5:0x0:0x0', 'SHLVL': '1', 'OLDPWD': '/Users/xutongze/Documents/menkan', 'ZSH': '/Users/xutongze/.oh-my-zsh', 'PAGER': 'less', 'LESS': '-R', 'LSCOLORS': 'Gxfxcxdxbxegedabagacad', '_': '/usr/local/bin/python3', '__PYVENV_LAUNCHER__': '/usr/local/bin/python3'})
+
+# 获取具体某个环境变量的值 `os.environ.get(key)`获取
+>>> os.environ.get('PATH')
+'/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/opt/X11/bin:/usr/local/mysql/bin'
+>>> os.environ.get('x', 'default') # 没有的话获取第二个key默认值。
+'default'
+
+# 操作文件和目录
+# 操作文件和目录的函数一部分放在os模块中，一部分放在os.path模块中，这一点要注意一下。查看、创建和删除目录可以这么调用：
+
+# 当前地址位置
+>>> os.path.abspath('.')
+'/Users/xutongze/Documents/menkan/py-trade'
+
+# 在某个目录下创建一个新目录，首先把新目录的完整路径表示出来:
+>>> os.path.join('/Users/michael', 'testdir')
+'/Users/michael/testdir'
+
+# 然后创建一个目录:
+>>> os.mkdir('/Users/michael/testdir')
+
+# 删掉一个目录:
+>>> os.rmdir('/Users/michael/testdir')
+
+# === 因为Win&Mac路径展示方式不同。 路径合并的话最好通过 `os.path.join(xx, xx, xx)`去合并
+
+# 同样的道理，要拆分路径时，也不要直接去拆字符串，而要通过os.path.split()函数，这样可以把一个路径拆分为两部分，后一部分总是最后级别的目录或文件名：
+>>> os.path.split('/Users/michael/testdir/file.txt')
+('/Users/michael/testdir', 'file.txt')
+
+# `os.path.splitext()` 可以直接让你得到文件扩展名，很多时候非常方便：
+>>> os.path.splitext('/path/to/file.txt')
+('/path/to/file', '.txt')
+
+
+# rename
+>>> os.rename(oldname, newname)
+# 删掉文件:
+>>> os.remove('test.py')
+
+# os中没有提供Copy文件等功能。
+# === shutil模块中提供了该函数 `copyfile()`
+
+
+# 最后看看如何利用Python的特性来过滤文件。比如我们要列出当前目录下的所有目录，只需要一行代码：
+>>> [x for x in os.listdir('.') if os.path.isdir(x)]
+['.lein', '.local', '.m2', '.npm', '.ssh', '.Trash', '.vim', 'Applications', 'Desktop', ...]
+
+# 列出所有.py 文件
+>>> [x for x in os.listdir('.') if os.path.isfile(x) and os.path.splitext(x)[1]=='.py']
+['apis.py', 'config.py', 'models.py', 'pymonitor.py', 'test_db.py', 'urls.py', 'wsgiapp.py']
+
+```
+
+### 序列化
+
+> 在程序运行的过程中，所有的变量都是在内存中; 一旦运行结束就会收回内存变量
+
+> 我们把变量从内存中变成可存储或传输的过程称之为序列化，在Python中叫pickling，在其他语言中也被称之为serialization，marshalling，flattening等等，都是一个意思
+
+> 序列化之后，就可以把序列化后的内容写入磁盘，或者通过网络传输到别的机器上
+
+> 反过来，把变量内容从序列化的对象重新读到内存里称之为反序列化，即unpickling。
+
+> PY中提供了内置的序列化模块`pickle`
+
+```py
+# EXAMPLE:
+
+import pickle
+
+>>> d = dict(name='Bob', age=20, score=88)
+>>> pickle.dumps(d)
+b'\x80\x03}q\x00(X\x03\x00\x00\x00ageq\x01K\x14X\x05\x00\x00\x00scoreq\x02KXX\x04\x00\x00\x00nameq\x03X\x03\x00\x00\x00Bobq\x04u.'
+
+
+```
+

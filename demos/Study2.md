@@ -77,7 +77,6 @@ b'\xff\xd8\xff\xe1\x00\x18Exif\x00\x00...' # 十六进制表示的字节
 
 
 
-
 # ==== write files
 # 写文件和读文件是一样的，唯一区别是调用open()函数时，传入标识符'w'或者'wb'表示写文本文件或写二进制文件：
 
@@ -246,9 +245,228 @@ environ({'TERM_SESSION_ID': 'w0t0p0:1DFD9215-DE7C-41E2-8C5E-902B60E4833D', 'SSH_
 import pickle
 
 >>> d = dict(name='Bob', age=20, score=88)
->>> pickle.dumps(d)
+>>> pickle.dumps(d) # 序列化就是把数据格式化bytes然后存储到内存\磁盘中
 b'\x80\x03}q\x00(X\x03\x00\x00\x00ageq\x01K\x14X\x05\x00\x00\x00scoreq\x02KXX\x04\x00\x00\x00nameq\x03X\x03\x00\x00\x00Bobq\x04u.'
 
+>>> f = open('/xxx/xx.py', 'wb')
+>>> pickle.dump(d, f) # 把数据格式化成 file-like Object 
+>>> f.close()
+```
+
+#### JSON
+
+> js and py 相差不大转换轻松
+
+```py
+
+import json
+
+d = dict(name='mk', age=20)
+>>> json.dumps(d) # 转换成JSON格式数据
+'{"age": 20, "score": 88, "name": "Bob"}'
+dump()方法可以直接把JSON写入一个file-like Object。
+
+>>> json.loads(d) # 转换为py的dict格式数据
+# 要把JSON反序列化为Python对象，用loads()或者对应的load()方法，前者把JSON的字符串反序列化，后者从file-like Object中读取字符串并反序列化：
+
+# JSON 进阶
+
+# 搞定Class类实例 => json 化
+
+
+#LINK  https://www.liaoxuefeng.com/wiki/1016959663602400/1017624706151424
 
 ```
 
+## 进程与线程
+
+> 对于操作系统来说，一个任务就是一个进程（Process）
+
+> 同一个进程存在多个子任务(线程); 每个进程至少有一个线程
+
+
+```py
+# 多任务执行如何方法？
+1.多进程方法
+2.多线程方法
+3.多进程多线程
+
+同时执行多个任务通常各个任务之间并不是没有关联的，而是需要相互通信和协调，有时，任务1必须暂停等待任务2完成后才能继续执行，有时，任务3和任务4又不能同时执行，所以，多进程和多线程的程序的复杂度要远远高于我们前面写的单进程单线程的程序。
+因为复杂度高，调试困难
+```
+
+#### 多进程（multiprocessing）
+
+[click views](https://www.liaoxuefeng.com/wiki/1016959663602400/1017628290184064)
+
+
+> unix/linux 提供了fork() 系统调用;fork()调用一次，返回两次，因为操作系统自动把当前进程（称为父进程）复制了一份（称为子进程），然后，分别在父进程和子进程内返回。
+
+> 子进程永远返回0，而父进程返回子进程的ID。这样做的理由是，一个父进程可以fork出很多子进程，所以，父进程要记下每个子进程的ID，而子进程只需要调用`getppid()`就可以拿到父进程的ID。
+
+```py
+import os
+from multiprocessing import Process # process module of Windows .
+
+```
+
+###### Pool
+
+> 进程池。 如果存在大量的子进程 可以通过进程池的方式批量创建子进程
+
+#### 子进程(subprocesses)
+
+```py
+import subprocess # subprocesses modules.
+
+```
+
+## 正则表达式
+
+> re modules in python;
+
+```py
+import re
+
+re = r'ABC\-001'
+
+re.match(r'\d[3]\-\d{3,8}$', '010-12345')
+
+# match()方法判断是否匹配，如果匹配成功，返回一个Match对象，否则返回None
+
+
+# 切分字符串
+>>> re.split(r'\s+', 'a b   c')
+['a', 'b', 'c']
+>>> re.split(r'[\s\,]+', 'a,b, c  d')
+['a', 'b', 'c', 'd']
+>>> re.split(r'[\s\,\;]+', 'a,b;; c  d')
+['a', 'b', 'c', 'd']
+
+# 分组
+# ^(\d{3})-(\d{3,8})$分别定义了两个组，可以直接从匹配的字符串中提取出区号和本地号码：
+>>> m = re.match(r'^(\d{3})-(\d{3,8})$', '010-12345')
+>>> m
+<_sre.SRE_Match object; span=(0, 9), match='010-12345'>
+>>> m.group(0)
+'010-12345'
+>>> m.group(1)
+'010'
+>>> m.group(2)
+'12345'
+
+>>> t = '19:05:30'
+>>> m = re.match(r'^(0[0-9]|1[0-9]|2[0-3]|[0-9])\:(0[0-9]|1[0-9]|2[0-9]|3[0-9]|4[0-9]|5[0-9]|[0-9])\:(0[0-9]|1[0-9]|2[0-9]|3[0-9]|4[0-9]|5[0-9]|[0-9])$', t)
+>>> m.groups()
+('19', '05', '30')
+
+
+# 贪婪匹配
+
+# 由于\d+采用贪婪匹配，直接把后面的0全部匹配了，结果0*只能匹配空字符串了。
+
+# 必须让\d+采用非贪婪匹配（也就是尽可能少匹配），才能把后面的0匹配出来，加个?就可以让\d+采用非贪婪匹配：
+
+>>> re.match(r'^(\d+?)(0*)$', '102300').groups()
+('1023', '00')
+
+# 编译
+# 当我们在Python中使用正则表达式时，re模块内部会干两件事情：
+
+# 编译正则表达式，如果正则表达式的字符串本身不合法，会报错；
+
+# 用编译后的正则表达式去匹配字符串。
+
+# 如果一个正则表达式要重复使用几千次，出于效率的考虑，我们可以预编译该正则表达式，接下来重复使用时就不需要编译这个步骤了，直接匹配：
+
+>>> import re
+# 编译:
+>>> re_telephone = re.compile(r'^(\d{3})-(\d{3,8})$')
+# 使用：
+>>> re_telephone.match('010-12345').groups()
+('010', '12345')
+>>> re_telephone.match('010-8086').groups()
+('010', '8086')
+```
+
+## 常用内建模块
+
+### datetime
+
+```py
+# a datetime is modules in class is datetime
+from datetime import datetime
+now = datetime.now() # current time
+print(now)
+
+dt = datetime(2020, 4,18,12,20)
+
+dt.timestamp() # 把时间转换成时间戳.
+
+datetime.fromtimestamp(123124124) # 时间戳转换成datetime
+
+# str => datetime
+datetime.strptime('2020-9-2 18:19:59', '%Y-%m-%d %H:%M:%S')
+
+# datetime转换为str
+now = datetime.now()
+now.strftime('%a, %b %d %H:%M')
+
+# datetime加减
+from datetime import datetime, timedelta
+
+now = datetime.now()
+
+now + timedelta(hours=10) # 当前时间加上 10个小时
+
+# 本地时间转换为UTC时间
+# 本地时间是指系统设定时区的时间，例如北京时间是UTC+8:00时区的时间，而UTC时间指UTC+0:00时区的时间。
+本地时间是指系统设定时区的时间，例如北京时间是UTC+8:00时区的时间，而UTC时间指UTC+0:00时区的时间。
+
+一个datetime类型有一个时区属性tzinfo，但是默认为None，所以无法区分这个datetime到底是哪个时区，除非强行给datetime设置一个时区：
+
+>>> from datetime import datetime, timedelta, timezone
+>>> tz_utc_8 = timezone(timedelta(hours=8)) # 创建时区UTC+8:00
+>>> now = datetime.now()
+>>> now
+datetime.datetime(2015, 5, 18, 17, 2, 10, 871012)
+>>> dt = now.replace(tzinfo=tz_utc_8) # 强制设置为UTC+8:00
+>>> dt
+datetime.datetime(2015, 5, 18, 17, 2, 10, 871012, tzinfo=datetime.timezone(datetime.timedelta(0, 28800)))
+如果系统时区恰好是UTC+8:00，那么上述代码就是正确的，否则，不能强制设置为UTC+8:00时区。
+
+# 时区转换
+# utcnow()拿到当前的UTC时间，再转换为任意时区的时间
+
+# 拿到UTC时间，并强制设置时区为UTC+0:00:
+>>> utc_dt = datetime.utcnow().replace(tzinfo=timezone.utc)
+>>> print(utc_dt)
+2015-05-18 09:05:12.377316+00:00
+# astimezone()将转换时区为北京时间:
+>>> bj_dt = utc_dt.astimezone(timezone(timedelta(hours=8)))
+>>> print(bj_dt)
+2015-05-18 17:05:12.377316+08:00
+# astimezone()将转换时区为东京时间:
+>>> tokyo_dt = utc_dt.astimezone(timezone(timedelta(hours=9)))
+>>> print(tokyo_dt)
+2015-05-18 18:05:12.377316+09:00
+# astimezone()将bj_dt转换时区为东京时间:
+>>> tokyo_dt2 = bj_dt.astimezone(timezone(timedelta(hours=9)))
+>>> print(tokyo_dt2)
+2015-05-18 18:05:12.377316+09:00
+时区转换的关键在于，拿到一个datetime时，要获知其正确的时区，然后强制设置时区，作为基准时间。
+
+利用带时区的datetime，通过astimezone()方法，可以转换到任意时区。
+
+注：不是必须从UTC+0:00时区转换到其他时区，任何带时区的datetime都可以正确转换，例如上述bj_dt到tokyo_dt的转换。
+
+```
+
+### collections
+
+#### namedtuple
+
+```py
+
+
+```

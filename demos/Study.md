@@ -1,4 +1,4 @@
-[TOC]
+[toc]
 
 # 小记
 
@@ -490,6 +490,8 @@ def yhs(loop=6):
 判断是否是迭代器
 `from collections.abc import Iterator`
 
+`Iterator //惰性计算序列`
+
 > 可以被 next()函数调用并不断返回下一个值的对象称为迭代器：Iterator
 
 ```python
@@ -499,9 +501,9 @@ isinstance(obj, Iterator);
 # 生成器都是 Iterator 对象
 # 把list、dict、str等Iterable变成Iterator可以使用iter()函数
 >>> isinstance(iter([]), Iterator)
-True
+False
 >>> isinstance(iter('abc'), Iterator)
-True
+False
 
 
 ```
@@ -536,6 +538,7 @@ from functools import reduce
 
 def add(x, y):
     return x + y
+
 l = reduce(add, [1, 2, 3, 4, 5])
 
 def normalize(name):
@@ -652,10 +655,11 @@ now = log('execute)(now)
 import functools
 
 # 通过 functools.partial 函数制作。
+# 根据现有函数加工
 
 int2 = functools.partial(int, base=2)
 
-# > 当函数的参数个数太多，需要简化时，使用functools.partial可以创建一个新的函数，这个新函数可以固定住原函数的部分参数，从而在调用时更简单。
+# > 当函数的参数个数太多，需要简化时，使用functools.partial 可以创建一个新的函数，这个新函数可以固定住原函数的部分参数，从而在调用时更简单。
 ```
 
 ## 模块

@@ -42,49 +42,56 @@ class GetHtml:
         pass
 
 # 模拟 Pc Client User
-class Chameleon:
-    def __init__(self) -> None:
-        pass
-    
-    def _set_header(self):
-        header = {
-            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
-            "Cache-Control": "max-age=0",
-            "Host": "m.bswtan.com", # 模拟的host网址.
-            "Accept-Language": "zh-CN,zh;q=0.9",
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36",
-        }
-        return header
-
+def _chameleon() -> dict:
+    return {
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+        "Cache-Control": "max-age=0",
+        "Accept-Language": "zh-CN,zh;q=0.9",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36",
+        "Host": "m.bswtan.com",
+    }
 
 class Main:
-    pass
-
-
-def check_link_isconfirm(link) -> bool:
-    # baseUrl = 'http://m.bswtan.com/43/43127/'
-    regexp = r'^http[s]://\w*.\w*.com/\d*/\d*/$'
-    res = re.match(regexp, link)
-    if res:
+    # initiation
+    def __init__(self) -> None:
+        args = sys.argv
+        lengs = len(args)
+        if lengs == 1:
+            link = baseUrl
+            print('执行内部constant. %s' % link)
+            self.step1(link)
+        elif lengs == 2:
+            link = args[1]
+            print('执行外部传入verable, >>> %s' % link)
+            self.step1(link)
+        else:
+            print('Error input txt')
+            self.out_command()
+    
+    # step1.
+    def step1(self, link):
+        print(self._check_link_isconfirm(link))
         pass
-    else:
-        print('Invalid Link.')
+    
+    # out command.
+    def out_command(self):
+        print('| End | program error. exit()')
         exit()
 
+    # check lin is confirm.
+    def _check_link_isconfirm(self, link) -> bool:
+        regexp = r'^http[s]?://\w*.\w*.com/\d*/\d*/$'
+        res = re.match(regexp, link)
+        if res:
+            print('link okay.')
 
-# initization.
-def init():
-    args = sys.argv
-    lengs = len(args)
-    if lengs == 1:
-        link = baseUrl
-        print('执行内部constant.')
-    elif lengs == 2:
-        link = args[2]
-        print('执行外部传入verable')
-    else:
-        print('Error input txt')
-        exit()
+        else:
+            print('Invalid Link.')
+            self.out_command()
+
+        return True if res else False
+
+
 
 if __name__ == '__main__':
-    init()
+    Main()

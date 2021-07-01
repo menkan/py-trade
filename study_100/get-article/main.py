@@ -5,34 +5,30 @@
 
 import sys
 import re
+from typing import NamedTuple
 # import requests
 # from lxml import etree
 # import json
 # import time
 
-# website link.
-baseUrl = 'http://m.bswtan.com/43/43127/'
+# myself module
+from brower_c import Brower
 
-# >>>>>>>
+brower_header = Brower()._chameleon()
+
+# website link.
+baseUrl = 'https://www.biquge7.com/book/199/'
 
 '''
 书写流程概要.
-
 当前页面Url.
-
 根据url取获取当前页面(模拟PC请求页面；防止过多广告)全部html内容。
 通过etree过滤html保留 标题，正文，上一页，下一页等内容;
-
 当点击上/下一页的时候
-
 '''
 
 # 获取链接所有内容
 class GetHtml:
-
-    def __init__(self):
-        pass
-
     # 获取全部Html内容
     def get_all_html(self):
         pass
@@ -41,56 +37,56 @@ class GetHtml:
     def get_part_html(self):
         pass
 
-# 模拟 Pc Client User
-def _chameleon() -> dict:
-    return {
-        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
-        "Cache-Control": "max-age=0",
-        "Accept-Language": "zh-CN,zh;q=0.9",
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36",
-        "Host": "m.bswtan.com",
-    }
-
 class Main:
+    # self
+    result = '' # 全部内容。
+    get_html_t = None
+
     # initiation
     def __init__(self) -> None:
         args = sys.argv
         lengs = len(args)
+
         if lengs == 1:
             link = baseUrl
-            print('执行内部constant. %s' % link)
-            self.step1(link)
+            print('执行内部 Link. %s' % link)
+
         elif lengs == 2:
             link = args[1]
-            print('执行外部传入verable, >>> %s' % link)
-            self.step1(link)
+            print('执行外部传入verable link. %s' % link)
+
         else:
-            print('Error input txt')
             self.out_command()
+
+        self.step1(link)
     
     # step1.
+    # 检查地址.
     def step1(self, link):
-        print(self._check_link_isconfirm(link))
-        pass
+        # check link is comfirm.
+        bool = self._check_link_isconfirm(link)
+
+        if not bool:
+            self.out_command()
+
+        # 获取全部数据内容
+        self.get_html_t = GetHtml()
+
     
+    # check lin is confirm.
+    def _check_link_isconfirm(self, link) -> bool:
+        regexp = r'^http[s]?://.*'
+        res = re.match(regexp, link)
+        if res:
+            print('link okay.')
+            return True
+        else:
+            self.out_command()
+
     # out command.
     def out_command(self):
         print('| End | program error. exit()')
         exit()
-
-    # check lin is confirm.
-    def _check_link_isconfirm(self, link) -> bool:
-        regexp = r'^http[s]?://\w*.\w*.com/\d*/\d*/$'
-        res = re.match(regexp, link)
-        if res:
-            print('link okay.')
-
-        else:
-            print('Invalid Link.')
-            self.out_command()
-
-        return True if res else False
-
 
 
 if __name__ == '__main__':

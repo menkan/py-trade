@@ -1,11 +1,11 @@
 # encoding: utf-8
 
-
 # import package.
 
 import sys
 import re
 from typing import NamedTuple
+
 # import requests
 # from lxml import etree
 # import json
@@ -36,6 +36,7 @@ class GetHtml:
     # 获取关键内容
     def get_part_html(self):
         pass
+
 
 class Main:
     # self

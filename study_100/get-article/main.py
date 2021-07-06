@@ -49,7 +49,8 @@ class GetHtml:
 
     # 获取全部Html内容
     def get_all_html(self):
-        response = requests.get(base_origin + base_path, headers=brower_header)
+        response = requests.get(self.link, headers=brower_header)
+        print(response.content.decode())
         if response.status_code == 200:
             print('1')
         else:
@@ -93,7 +94,7 @@ class Main:
             common.out_command()
 
         # 获取全部数据内容
-        self.get_html_t = GetHtml().get_all_html()
+        self.get_html_t = GetHtml(link=link).get_all_html()
 
 
     
